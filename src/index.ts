@@ -2,7 +2,11 @@ import { API_HOST, API_URL, USER_AGENT } from "./util/Constants";
 import { Options } from "./util/types";
 import Animals from "./Endpoints/Animals";
 import Furry from "./Endpoints/Furry";
-import "source-map-support/register"
+try {
+	require("source-map-support/register");
+} catch (e) {
+	// throw away the error, likely just means we're not in a development enviornment
+}
 
 class Yiffy {
 	options: Options;
