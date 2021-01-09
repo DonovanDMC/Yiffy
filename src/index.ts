@@ -27,4 +27,3 @@ class Yiffy {
 export default Yiffy;
 module.exports = Yiffy;
 export { Yiffy };
-export * from "./util/types";
