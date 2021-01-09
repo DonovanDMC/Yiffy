@@ -1,5 +1,5 @@
 import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
-import { JSONResponse, ImageResponse, YiffEndpoints, Options } from "../util/types";
+import { JSONResponse, ImageResponse, YiffEndpoints, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import { performance } from "perf_hooks";
 import get from "../util/get";
@@ -101,10 +101,10 @@ export default class YIFF {
 		}
 	}
 
-	get gay() { return this.sendRequest.bind(this, "gay"); }
-	get gynomorph() { return this.sendRequest.bind(this, "gynomorph"); }
-	get lesbian() { return this.sendRequest.bind(this, "lesbian"); }
-	get straight() { return this.sendRequest.bind(this, "straight"); }
+	get gay() { return this.sendRequest.bind(this, "gay") as typeof f; }
+	get gynomorph() { return this.sendRequest.bind(this, "gynomorph") as typeof f; }
+	get lesbian() { return this.sendRequest.bind(this, "lesbian") as typeof f; }
+	get straight() { return this.sendRequest.bind(this, "straight") as typeof f; }
 
 	private get debug() { return this.options.debug; }
 }

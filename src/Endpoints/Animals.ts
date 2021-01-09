@@ -1,5 +1,5 @@
 import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
-import { JSONResponse, ImageResponse, AnimalEndpoints, Options } from "../util/types";
+import { JSONResponse, ImageResponse, AnimalEndpoints, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import { performance } from "perf_hooks";
 import get from "../util/get";
@@ -108,12 +108,12 @@ export default class Animals {
 		}
 	}
 
-	get birb() { return this.sendRequest.bind(this, "birb"); }
-	get blep() { return this.sendRequest.bind(this, "blep"); }
-	get cheeta() { return this.sendRequest.bind(this, "cheeta"); }
-	get fox() { return this.sendRequest.bind(this, "fox"); }
-	get lynx() { return this.sendRequest.bind(this, "lynx"); }
-	get wolf() { return this.sendRequest.bind(this, "wolf"); }
+	get birb() { return this.sendRequest.bind(this, "birb") as typeof f; }
+	get blep() { return this.sendRequest.bind(this, "blep") as typeof f; }
+	get cheeta() { return this.sendRequest.bind(this, "cheeta") as typeof f; }
+	get fox() { return this.sendRequest.bind(this, "fox") as typeof f; }
+	get lynx() { return this.sendRequest.bind(this, "lynx") as typeof f; }
+	get wolf() { return this.sendRequest.bind(this, "wolf") as typeof f; }
 
 	private get debug() { return this.options.debug; }
 }

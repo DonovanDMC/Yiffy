@@ -1,9 +1,9 @@
 import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
+import { FurryEndpoints, ImageResponse, JSONResponse, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import YIFF from "./Yiff";
 import { performance } from "perf_hooks";
 import get from "../util/get";
-import { FurryEndpoints, ImageResponse, JSONResponse, Options } from "../util/types";
 
 export default class Furry {
 	options: Options;
@@ -102,18 +102,18 @@ export default class Furry {
 		}
 	}
 
-	get boop() { return this.sendRequest.bind(this, "boop"); }
-	get cuddle() { return this.sendRequest.bind(this, "cuddle"); }
-	get flop() { return this.sendRequest.bind(this, "flop"); }
-	get fursuit() { return this.sendRequest.bind(this, "fursuit"); }
-	get hold() { return this.sendRequest.bind(this, "hold"); }
-	get howl() { return this.sendRequest.bind(this, "howl"); }
-	get hug() { return this.sendRequest.bind(this, "hug"); }
-	get kiss() { return this.sendRequest.bind(this, "kiss"); }
-	get lick() { return this.sendRequest.bind(this, "lick"); }
-	get propose() { return this.sendRequest.bind(this, "propose"); }
-	get butts() { return this.sendRequest.bind(this, "butts"); }
-	get bulge() { return this.sendRequest.bind(this, "bulge"); }
+	get boop() { return this.sendRequest.bind(this, "boop") as typeof f; }
+	get cuddle() { return this.sendRequest.bind(this, "cuddle") as typeof f; }
+	get flop() { return this.sendRequest.bind(this, "flop") as typeof f; }
+	get fursuit() { return this.sendRequest.bind(this, "fursuit") as typeof f; }
+	get hold() { return this.sendRequest.bind(this, "hold") as typeof f; }
+	get howl() { return this.sendRequest.bind(this, "howl") as typeof f; }
+	get hug() { return this.sendRequest.bind(this, "hug") as typeof f; }
+	get kiss() { return this.sendRequest.bind(this, "kiss") as typeof f; }
+	get lick() { return this.sendRequest.bind(this, "lick") as typeof f; }
+	get propose() { return this.sendRequest.bind(this, "propose") as typeof f; }
+	get butts() { return this.sendRequest.bind(this, "butts") as typeof f; }
+	get bulge() { return this.sendRequest.bind(this, "bulge") as typeof f; }
 	get yiff() { return this._yiff || (this._yiff = new YIFF(this.options)); }
 
 	private get debug() { return this.options.debug; }
