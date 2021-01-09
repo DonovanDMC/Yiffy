@@ -1,10 +1,10 @@
 {
   "name": "yiffy",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "API Wrapper for https://yiff.rest.",
   "main": "build/src/index.js",
   "scripts": {
-    "build": "rm -rf build && tsc && echo Build Finished",
+    "build": "rm -rf build && tsc && cp src/util/types.d.ts build/src/util/ && echo Build Finished",
     "prepare": "npm run build"
   },
   "repository": {
