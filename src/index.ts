@@ -2,6 +2,7 @@ import { API_HOST, API_URL, USER_AGENT } from "./util/Constants";
 import { Options } from "./util/types";
 import Animals from "./Endpoints/Animals";
 import Furry from "./Endpoints/Furry";
+import "source-map-support/register"
 
 class Yiffy {
 	options: Options;
