@@ -1,4 +1,4 @@
-## <center>Furry Bot API</center>
+## <center>Yiffy API</center>
 
 ### Advantages of this api:
 * Requires no authentication, so it is easier to use
