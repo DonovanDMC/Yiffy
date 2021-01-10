@@ -9,7 +9,7 @@
 
 ### This is the **only** official api wrapper for [yiff.rest](https://docs.yiff.rest), with special typescript support for all endpoints!
 
-### You can get the available methods from the typings, or by making a request to [https://yiff.rest/V2/categories](https://yiff.rest/categories), replace the periods in the `db` property with forward slashes, and use that as the url.
+### You can get the available methods from the typings, or by making a request to [https://yiff.rest/V2/categories](https://yiff.rest/V2/categories), replace the periods in the `db` property with forward slashes, and use that as the url.
 
 ### If you are building this module from scratch, you will need to build it using `npm run build`, this will put the js files you need in the `build` folder. (you will need typescript to be installed globally (npm i -g typescript) to use the typescript compiler) 
 
