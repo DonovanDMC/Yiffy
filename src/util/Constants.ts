@@ -15,4 +15,4 @@ export const API_HEADERS = {
 	name: "X-Yiffy-Image-Name",
 	ext: "X-Yiffy-Image-Extension"
 };
-export const USER_AGENT = `Yiffy/${pkg.version} (https://api.furry.bot/V2, https://github.com/FurryBotCo/Yiffy)`;
+export const USER_AGENT = `Yiffy/${pkg.version} (https://yiff.rest/V2, https://github.com/FurryBotCo/Yiffy)`;
