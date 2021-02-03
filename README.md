@@ -1,6 +1,6 @@
 ## <center>Yiffy API</center>
 
-![](https://nodei.co/npm/yiffy.png)
+[![](https://nodei.co/npm/yiffy.png)](https://npm.im/yiffy)
 
 ### Advantages of this api:
 * Requires no authentication, so it is easier to use
