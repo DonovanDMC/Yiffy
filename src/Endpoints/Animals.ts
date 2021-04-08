@@ -18,9 +18,9 @@ export default class Animals {
 	}
 
 	private async sendRequest(cat: AnimalEndpoints, method: "image"): Promise<ImageResponse>;
-	private async sendRequest(cat: AnimalEndpoints, method: "json", amount: 1): Promise<JSONResponse>;
-	private async sendRequest(cat: AnimalEndpoints, method: "json", amount?: 2 | 3 | 4 | 5): Promise<JSONResponse[]>;
-	private async sendRequest(cat: AnimalEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5): Promise<JSONResponse[] | JSONResponse | ImageResponse> {
+	private async sendRequest(cat: AnimalEndpoints, method: "json", amount: 1, maxImageSize?: string): Promise<JSONResponse>;
+	private async sendRequest(cat: AnimalEndpoints, method: "json", amount?: 2 | 3 | 4 | 5, maxImageSize?: string): Promise<JSONResponse[]>;
+	private async sendRequest(cat: AnimalEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5, maxImageSize?: string): Promise<JSONResponse[] | JSONResponse | ImageResponse> {
 		if (!cat) throw new TypeError("missing category");
 		if (!method) method = "json";
 		method = method.toLowerCase() as any;
@@ -33,7 +33,7 @@ export default class Animals {
 		switch (method) {
 			case "image": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/animals/${cat}/image`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/${API_VERSION}/animals/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
@@ -52,7 +52,8 @@ export default class Animals {
 					reportURL: "",
 					type: "",
 					name: "",
-					ext: ""
+					ext: "",
+					size: 0
 				} as JSONResponse;
 
 				Object.keys(r.headers).map((h: string) => {
@@ -65,12 +66,18 @@ export default class Animals {
 				});
 
 				if (r.statusCode !== 200) {
+					let v: { error: string } | string;
+					try {
+						v = JSON.parse(r.body.toString());
+					} catch(e) {
+						v = r.body.toString();
+					}
 					const e = ErrorHandler(r.statusCode);
-					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage}`);
+					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage} (${typeof v === "string" ? v : v.error})`);
 					else throw new TypeError(e);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/animals/${cat}/image`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/${API_VERSION}/animals/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return {
 					image: r.body,
@@ -81,13 +88,19 @@ export default class Animals {
 
 			case "json": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/animals/${cat}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/${API_VERSION}/animals/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
+					let v: { error: string } | string;
+					try {
+						v = JSON.parse(r.body.toString());
+					} catch(e) {
+						v = r.body.toString();
+					}
 					const e = ErrorHandler(r.statusCode);
-					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage}`);
+					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage} (${typeof v === "string" ? v : v.error})`);
 					else throw new TypeError(e);
 				}
 
@@ -98,7 +111,7 @@ export default class Animals {
 					throw new TypeError(`Error parsing JSON body: ${e.stack}`);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/animals/${cat}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/${API_VERSION}/animals/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return amount === 1 ? b.images[0] as JSONResponse : b.images as JSONResponse[];
 				break;
@@ -111,6 +124,7 @@ export default class Animals {
 	get birb() { return this.sendRequest.bind(this, "birb") as typeof f; }
 	get blep() { return this.sendRequest.bind(this, "blep") as typeof f; }
 	get cheeta() { return this.sendRequest.bind(this, "cheeta") as typeof f; }
+	get dikdik() { return this.sendRequest.bind(this, "dikdik") as typeof f; }
 	get fox() { return this.sendRequest.bind(this, "fox") as typeof f; }
 	get lynx() { return this.sendRequest.bind(this, "lynx") as typeof f; }
 	get wolf() { return this.sendRequest.bind(this, "wolf") as typeof f; }

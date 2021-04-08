@@ -1,5 +1,5 @@
 import https from "https";
-import URL from "url";
+import { URL } from "url";
 import { API_HOST } from "./Constants";
 
 export default async function get(url: string, ua: string, auth?: string, host?: string): Promise<{
@@ -9,11 +9,11 @@ export default async function get(url: string, ua: string, auth?: string, host?:
 	statusMessage: string;
 }> {
 	return new Promise((a, b) => {
-		const u = URL.parse(url);
+		const u = new URL(url);
 		https
 			.get({
 				host: u.host,
-				path: u.path,
+				path: `${u.pathname}${u.search}`,
 				port: url.indexOf("https") !== -1 ? 443 : 80,
 				method: "GET",
 				headers: {
@@ -28,7 +28,7 @@ export default async function get(url: string, ua: string, auth?: string, host?:
 
 				res
 					.on("data", d.push.bind(d))
-					.on("error", b)
+					.on("error", (err) => b(err))
 					.on("end", () => a({
 						headers: res.headers as any,
 						body: Buffer.concat(d),

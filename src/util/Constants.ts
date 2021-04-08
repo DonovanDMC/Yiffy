@@ -13,6 +13,7 @@ export const API_HEADERS = {
 	reportURL: "X-Yiffy-Report-URL",
 	type: "X-Yiffy-Image-Type",
 	name: "X-Yiffy-Image-Name",
+	size: "X-Yiffy-Image-Size",
 	ext: "X-Yiffy-Image-Extension"
 };
 export const USER_AGENT = `Yiffy/${pkg.version} (https://yiff.rest/V2, https://github.com/FurryBotCo/Yiffy)`;

@@ -20,9 +20,9 @@ export default class Furry {
 	}
 
 	private async sendRequest(cat: FurryEndpoints, method: "image"): Promise<ImageResponse>;
-	private async sendRequest(cat: FurryEndpoints, method: "json", amount: 1): Promise<JSONResponse>;
-	private async sendRequest(cat: FurryEndpoints, method: "json", amount?: 2 | 3 | 4 | 5): Promise<JSONResponse[]>;
-	private async sendRequest(cat: FurryEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5): Promise<JSONResponse[] | JSONResponse | ImageResponse> {
+	private async sendRequest(cat: FurryEndpoints, method: "json", amount: 1, maxImageSize?: string): Promise<JSONResponse>;
+	private async sendRequest(cat: FurryEndpoints, method: "json", amount?: 2 | 3 | 4 | 5, maxImageSize?: string): Promise<JSONResponse[]>;
+	private async sendRequest(cat: FurryEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5, maxImageSize?: string): Promise<JSONResponse[] | JSONResponse | ImageResponse> {
 		if (!cat) throw new TypeError("missing category");
 		if (!method) method = "json";
 		method = method.toLowerCase() as any;
@@ -33,12 +33,18 @@ export default class Furry {
 		switch (method) {
 			case "image": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/${cat}/image`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
+					let v: { error: string } | string;
+					try {
+						v = JSON.parse(r.body.toString());
+					} catch(e) {
+						v = r.body.toString();
+					}
 					const e = ErrorHandler(r.statusCode);
-					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage}`);
+					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage} (${typeof v === "string" ? v : v.error})`);
 					else throw new TypeError(e);
 				}
 
@@ -52,7 +58,8 @@ export default class Furry {
 					reportURL: "",
 					type: "",
 					name: "",
-					ext: ""
+					ext: "",
+					size: 0
 				} as JSONResponse;
 
 				Object.keys(r.headers).map((h: string) => {
@@ -64,7 +71,7 @@ export default class Furry {
 					}
 				});
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}/image`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return {
 					image: r.body,
@@ -75,13 +82,19 @@ export default class Furry {
 
 			case "json": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/${cat}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
+					let v: { error: string } | string;
+					try {
+						v = JSON.parse(r.body.toString());
+					} catch(e) {
+						v = r.body.toString();
+					}
 					const e = ErrorHandler(r.statusCode);
-					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage}`);
+					if (!e) throw new TypeError(`Non 200-OK status code returned from api: ${r.statusCode} ${r.statusMessage} (${typeof v === "string" ? v : v.error})`);
 					else throw new TypeError(e);
 				}
 
@@ -92,7 +105,7 @@ export default class Furry {
 					throw new TypeError(`Error parsing JSON body: ${e.stack}`);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return amount === 1 ? b.images[0] as JSONResponse : b.images as JSONResponse[];
 				break;
