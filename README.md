@@ -1,11 +1,14 @@
 ## <center>Yiffy API</center>
 
+[![](https://nodei.co/npm/yiffy.png)](https://npm.im/yiffy)
+
 ### Advantages of this api:
 * Requires no authentication, so it is easier to use
 * All image are HAND PICKED by the api creator, [Donovan_DMC](https://furry.cool) (note: if you find an image that seems out of place, report it in [our Discord server](https://yiff.rest/support), I try to do my best, but I'm not perfect!)
 * The api has multiple instances running, so requests are solved fast, even when there are many people accessing the api at one time!
 * Everything is served from our cdn ([yiff.media](https://yiff.media))
 * [99.9% uptime](https://status.yiff.rest/)
+* Everything is native NodeJS code, so zero dependencies!
 
 ### This is the **only** official api wrapper for [yiff.rest](https://docs.yiff.rest), with special typescript support for all endpoints!
 
