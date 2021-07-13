@@ -1,9 +1,9 @@
+import YIFF from "./Yiff";
 import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
 import { FurryEndpoints, ImageResponse, JSONResponse, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
-import YIFF from "./Yiff";
-import { performance } from "perf_hooks";
 import get from "../util/get";
+import { performance } from "perf_hooks";
 
 export default class Furry {
 	options: Options;
@@ -21,12 +21,12 @@ export default class Furry {
 
 	private async sendRequest(cat: FurryEndpoints, method: "image"): Promise<ImageResponse>;
 	private async sendRequest(cat: FurryEndpoints, method: "json", amount: 1, maxImageSize?: string): Promise<JSONResponse>;
-	private async sendRequest(cat: FurryEndpoints, method: "json", amount?: 2 | 3 | 4 | 5, maxImageSize?: string): Promise<JSONResponse[]>;
-	private async sendRequest(cat: FurryEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5, maxImageSize?: string): Promise<JSONResponse[] | JSONResponse | ImageResponse> {
+	private async sendRequest(cat: FurryEndpoints, method: "json", amount?: 2 | 3 | 4 | 5, maxImageSize?: string): Promise<Array<JSONResponse>>;
+	private async sendRequest(cat: FurryEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5, maxImageSize?: string): Promise<Array<JSONResponse> | JSONResponse | ImageResponse> {
 		if (!cat) throw new TypeError("missing category");
 		if (!method) method = "json";
-		method = method.toLowerCase() as any;
-		if (["image"].includes(method!) && amount && amount > 1) throw new TypeError("Ammount cannot be greater than one when requesting an image or stream.");
+		method = method.toLowerCase() as typeof method;
+		if (["image"].includes(method) && amount && amount > 1) throw new TypeError("Ammount cannot be greater than one when requesting an image or stream.");
 		if (amount === undefined) amount = 1;
 		if (amount && amount > 5) throw new TypeError("Amount cannot be greater than five.");
 
@@ -37,10 +37,10 @@ export default class Furry {
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
-					let v: { error: string } | string;
+					let v: { error: string; } | string;
 					try {
-						v = JSON.parse(r.body.toString());
-					} catch(e) {
+						v = JSON.parse(r.body.toString()) as typeof v;
+					} catch (e) {
 						v = r.body.toString();
 					}
 					const e = ErrorHandler(r.statusCode);
@@ -62,12 +62,14 @@ export default class Furry {
 					size: 0
 				} as JSONResponse;
 
-				Object.keys(r.headers).map((h: string) => {
-					if (Object.values(API_HEADERS).includes(h[0])) {
-						const n = Object.keys(API_HEADERS)[Object.values(API_HEADERS).indexOf(h)];
-						if ((d as any)[n] instanceof Array) (d as any)[n].push(r.headers[h]);
-						else if (typeof (d as any)[n] === "number") (d as any)[n] = Number(r.headers[h]);
-						else (d as any)[n] = r.headers[h];
+				// I'm not sure if the any spam or this is better,
+				// both are type abuse
+				Object.keys(r.headers).map((hr: string) => {
+					if (Object.values(API_HEADERS).includes(hr[0])) {
+						const n = Object.keys(API_HEADERS)[Object.values(API_HEADERS).indexOf(hr)] as "artists" | "sources";
+						if (d[n] instanceof Array) d[n].push(...(Array.isArray(r.headers[hr]) ? r.headers[hr] : [r.headers[hr] as string]));
+						else if (typeof d[n] === "number") d[n] = Number(r.headers[hr]) as unknown as Array<string>;
+						else d[n] = r.headers[hr] as Array<string>;
 					}
 				});
 
@@ -76,7 +78,7 @@ export default class Furry {
 				return {
 					image: r.body,
 					data: d
-				} as any as ImageResponse;
+				} as unknown as ImageResponse;
 				break;
 			}
 
@@ -87,10 +89,10 @@ export default class Furry {
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
-					let v: { error: string } | string;
+					let v: { error: string; } | string;
 					try {
-						v = JSON.parse(r.body.toString());
-					} catch(e) {
+						v = JSON.parse(r.body.toString()) as typeof v;
+					} catch (e) {
 						v = r.body.toString();
 					}
 					const e = ErrorHandler(r.statusCode);
@@ -98,19 +100,20 @@ export default class Furry {
 					else throw new TypeError(e);
 				}
 
-				let b;
+				let b: { images: Array<JSONResponse>;};
 				try {
-					b = JSON.parse(r.body.toString());
+					b = JSON.parse(r.body.toString()) as typeof b;
 				} catch (e) {
-					throw new TypeError(`Error parsing JSON body: ${e.stack}`);
+					throw new TypeError(`Error parsing JSON body: ${(e as Error).stack!}`);
 				}
 
 				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
-				return amount === 1 ? b.images[0] as JSONResponse : b.images as JSONResponse[];
+				return amount === 1 ? b.images[0]  : b.images ;
 				break;
 			}
 
+			// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 			default: throw new TypeError(`Unknown method "${method}"`);
 		}
 	}

@@ -1,40 +1,20 @@
 {
-    "$schema": "http://json.schemastore.org/tsconfig",
+    "extends": "@uwu-codes/tsconfig",
     "compilerOptions": {
-        "outDir": "./build",
-        "allowJs": true,
-        "target": "ESNext",
+        "outDir": "build",
         "baseUrl": "src",
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "moduleResolution": "node",
-        "module": "commonjs",
-        "paths": {},
-        "typeRoots": [
-            "./node_modules/@types",
-            "./src/util/@types"
-        ],
-        "inlineSourceMap": true,
-        "charset": "UTF-8",
-        "downlevelIteration": true,
-        "newLine": "lf" ,
-        "strict": true,
         "strictPropertyInitialization": false,
-        "strictBindCallApply": true,
-        "declaration": true
+        "skipLibCheck": true,
+        "inlineSourceMap": true
     },
     "include": [
-		"**/*"
+        "**/*"
     ],
     "exclude": [
         "node_modules",
         "build",
-        "out",
         "tmp",
-		"logs",
-		"test",
-		// better to compile them ourselves
-		"src/http/public/scripts"
+        "logs",
+        "test"
     ]
 }

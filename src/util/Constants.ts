@@ -1,8 +1,8 @@
 import pkg from "../../package.json";
 
-export const API_URL = "https://yiff.rest";
-export const API_HOST = "yiff.rest";
 export const API_VERSION = "V2";
+export const API_URL = `https://${API_VERSION.toLowerCase()}.yiff.rest`;
+export const API_HOST = `${API_VERSION.toLowerCase()}.yiff.rest`;
 export const API_HEADERS = {
 	artists: "X-Yiffy-Artist",
 	source: "X-Yiffy-Source",
@@ -16,4 +16,4 @@ export const API_HEADERS = {
 	size: "X-Yiffy-Image-Size",
 	ext: "X-Yiffy-Image-Extension"
 };
-export const USER_AGENT = `Yiffy/${pkg.version} (https://yiff.rest/V2, https://github.com/FurryBotCo/Yiffy)`;
+export const USER_AGENT = `Yiffy/${pkg.version} (https://${API_VERSION.toLowerCase()}.yiff.rest, https://github.com/DonovanDMC/Yiffy)`;

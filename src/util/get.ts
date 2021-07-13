@@ -1,9 +1,9 @@
+import { API_HOST } from "./Constants";
 import https from "https";
 import { URL } from "url";
-import { API_HOST } from "./Constants";
 
 export default async function get(url: string, ua: string, auth?: string, host?: string): Promise<{
-	headers: { [k: string]: string | string[]; };
+	headers: { [k: string]: string | Array<string>; };
 	body: Buffer;
 	statusCode: number;
 	statusMessage: string;
@@ -19,18 +19,18 @@ export default async function get(url: string, ua: string, auth?: string, host?:
 				headers: {
 					"User-Agent": ua,
 					"Host": host || API_HOST,
-					...(!!auth ? ({
+					...(auth ? ({
 						Authorization: auth
 					}) : ({}))
 				}
 			}, (res) => {
-				const d: Buffer[] = [];
+				const d: Array<Buffer> = [];
 
 				res
 					.on("data", d.push.bind(d))
 					.on("error", (err) => b(err))
 					.on("end", () => a({
-						headers: res.headers as any,
+						headers: res.headers as unknown as { [k: string]: string | Array<string>; },
 						body: Buffer.concat(d),
 						statusCode: res.statusCode!,
 						statusMessage: res.statusMessage!
