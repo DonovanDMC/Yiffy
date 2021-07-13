@@ -1,5 +1,5 @@
 import YIFF from "./Yiff";
-import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
+import { USER_AGENT, API_URL, API_HEADERS, API_HOST } from "../util/Constants";
 import { FurryEndpoints, ImageResponse, JSONResponse, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import get from "../util/get";
@@ -33,7 +33,7 @@ export default class Furry {
 		switch (method) {
 			case "image": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/furry/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
@@ -73,7 +73,7 @@ export default class Furry {
 					}
 				});
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/furry/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return {
 					image: r.body,
@@ -84,7 +84,7 @@ export default class Furry {
 
 			case "json": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 
 				const end = performance.now();
 
@@ -107,7 +107,7 @@ export default class Furry {
 					throw new TypeError(`Error parsing JSON body: ${(e as Error).stack!}`);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/furry/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return amount === 1 ? b.images[0]  : b.images ;
 				break;

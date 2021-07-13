@@ -1,4 +1,4 @@
-import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
+import { USER_AGENT, API_URL, API_HEADERS, API_HOST } from "../util/Constants";
 import { JSONResponse, ImageResponse, AnimalEndpoints, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import get from "../util/get";
@@ -33,7 +33,7 @@ export default class Animals {
 		switch (method) {
 			case "image": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/animals/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/animals/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
@@ -80,7 +80,7 @@ export default class Animals {
 					else throw new TypeError(e);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/animals/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/animals/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return {
 					image: r.body,
@@ -91,7 +91,7 @@ export default class Animals {
 
 			case "json": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/animals/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/animals/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 
 				const end = performance.now();
 
@@ -114,7 +114,7 @@ export default class Animals {
 					throw new TypeError(`Error parsing JSON body: ${(e as Error).stack!}`);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/animals/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/animals/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return amount === 1 ? b.images[0]  : b.images ;
 				break;

@@ -1,4 +1,4 @@
-import { USER_AGENT, API_URL, API_VERSION, API_HEADERS, API_HOST } from "../util/Constants";
+import { USER_AGENT, API_URL, API_HEADERS, API_HOST } from "../util/Constants";
 import { JSONResponse, ImageResponse, YiffEndpoints, Options, f } from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import get from "../util/get";
@@ -33,7 +33,7 @@ export default class YIFF {
 		switch (method) {
 			case "image": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/yiff/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/furry/yiff/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
@@ -73,7 +73,7 @@ export default class YIFF {
 					}
 				});
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/yiff/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/furry/yiff/${cat}/image?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return {
 					image: r.body,
@@ -84,7 +84,7 @@ export default class YIFF {
 
 			case "json": {
 				const start = performance.now();
-				const r = await get(`${this.options.baseURL}/${API_VERSION}/furry/yiff/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
+				const r = await get(`${this.options.baseURL}/furry/yiff/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, this.options.userAgent, this.options.apiKey);
 				const end = performance.now();
 
 				if (r.statusCode !== 200) {
@@ -106,7 +106,7 @@ export default class YIFF {
 					throw new TypeError(`Error parsing JSON body: ${(e as Error).stack!}`);
 				}
 
-				this.debug(`${this.options.baseURL}/${API_VERSION}/furry/yiff/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
+				this.debug(`${this.options.baseURL}/furry/yiff/${cat}?notes=disabled${maxImageSize ? `&sizeLimit=${maxImageSize}` : ""}`, { start, end, time: parseFloat((end - start).toFixed(2)) });
 
 				return amount === 1 ? b.images[0]  : b.images ;
 				break;
