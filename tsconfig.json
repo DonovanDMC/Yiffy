@@ -5,7 +5,8 @@
         "baseUrl": "src",
         "strictPropertyInitialization": false,
         "skipLibCheck": true,
-        "inlineSourceMap": true
+        "inlineSourceMap": true,
+        "declaration": true
     },
     "include": [
         "**/*"
