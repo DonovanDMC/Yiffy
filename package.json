@@ -1,6 +1,6 @@
 {
   "name": "yiffy",
-  "version": "2.0.15",
+  "version": "2.0.16",
   "description": "API Wrapper for https://yiff.rest.",
   "main": "build/src/index.js",
   "scripts": {
