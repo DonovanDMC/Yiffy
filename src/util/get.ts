@@ -1,9 +1,9 @@
 import { API_HOST } from "./Constants";
-import https from "https";
+import * as https from "https";
 import { URL } from "url";
 
 export default async function get(url: string, ua: string, auth?: string, host?: string): Promise<{
-	headers: { [k: string]: string | Array<string>; };
+	headers: Record<string, string | Array<string>>;
 	body: Buffer;
 	statusCode: number;
 	statusMessage: string;
@@ -14,7 +14,7 @@ export default async function get(url: string, ua: string, auth?: string, host?:
 			.get({
 				host: u.host,
 				path: `${u.pathname}${u.search}`,
-				port: url.indexOf("https") !== -1 ? 443 : 80,
+				port: url.includes("https") ? 443 : 80,
 				method: "GET",
 				headers: {
 					"User-Agent": ua,
@@ -30,7 +30,7 @@ export default async function get(url: string, ua: string, auth?: string, host?:
 					.on("data", d.push.bind(d))
 					.on("error", (err) => b(err))
 					.on("end", () => a({
-						headers: res.headers as unknown as { [k: string]: string | Array<string>; },
+						headers: res.headers as unknown as Record<string, string | Array<string>>,
 						body: Buffer.concat(d),
 						statusCode: res.statusCode!,
 						statusMessage: res.statusMessage!

@@ -1,6 +1,12 @@
 import YIFF from "./Yiff";
 import { USER_AGENT, API_URL, API_HEADERS, API_HOST } from "../util/Constants";
-import { FurryEndpoints, ImageResponse, JSONResponse, Options, f } from "../util/types";
+import type {
+	FurryEndpoints,
+	ImageResponse,
+	JSONResponse,
+	Options,
+	f
+} from "../util/types";
 import ErrorHandler from "../util/ErrorHandler";
 import get from "../util/get";
 import { performance } from "perf_hooks";
