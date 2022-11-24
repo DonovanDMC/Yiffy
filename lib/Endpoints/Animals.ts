@@ -25,7 +25,7 @@ export default class Animals {
         };
     }
 
-    private async sendRequest(cat: AnimalEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5, maxImageSize?: string): Promise<Array<JSONResponse> | JSONResponse | ImageResponse> {
+    private async sendRequest(cat: AnimalEndpoints, method?: "image" | "json", amount: 1 | 2 | 3 | 4 | 5 | undefined = method === "json" ? 1 : undefined, maxImageSize?: string): Promise<Array<JSONResponse> | JSONResponse | ImageResponse> {
         if (!cat) {
             throw new TypeError("missing category");
         }
@@ -34,7 +34,7 @@ export default class Animals {
         }
         method = method.toLowerCase() as typeof method;
         if (["image"].includes(method) && amount && amount > 1) {
-            throw new TypeError("Ammount cannot be greater than one when requesting an image or stream.");
+            throw new TypeError("Ammount cannot be greater than one when requesting an image.");
         }
         if (amount && amount > 5) {
             throw new TypeError("Amount cannot be greater than five.");
@@ -137,8 +137,8 @@ export default class Animals {
                 return amount === 1 ? b.images[0] : b.images;
             }
 
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            default: { throw new TypeError(`Unknown method "${method}"`);
+            default: {
+                throw new TypeError(`Unknown method "${method as string}"`);
             }
         }
     }
