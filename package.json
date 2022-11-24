@@ -1,11 +1,19 @@
 {
   "name": "yiffy",
-  "version": "2.0.16",
+  "version": "2.1.0",
   "description": "API Wrapper for https://yiff.rest.",
-  "main": "build/src/index.js",
+  "main": "dist/lib/index.js",
+  "module": "esm.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "require": "./dist/lib/index.js",
+      "import": "./esm.mjs"
+    }
+  },
   "scripts": {
-    "add-re-export": "echo \"export * from \\\"./util/types\\\";\" >> build/src/index.d.ts",
-    "build": "rm -rf build && tsc && cp src/util/types.d.ts build/src/util/ && npm run add-re-export && echo Build Finished",
+    "add-re-export": "echo \"export * from \\\"./util/types\\\";\" >> dist/lib/index.d.ts",
+    "build": "rm -rf dist && tsc && cp lib/util/types.d.ts dist/lib/util/ && npm run add-re-export && echo Build Finished",
     "prePublishOnly": "npm run build"
   },
   "repository": {
@@ -23,17 +31,17 @@
     "yiffy",
     "yiffer"
   ],
-  "author": "Donovan_DMC <hewwo@yiff.rocks> (https://donovan.is.gay)",
+  "author": "Donovan_DMC <hewwo@yiff.rocks> (https://furry.cool)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/DonovanDMC/Yiffy/issues"
   },
   "homepage": "https://yiff.rest",
   "devDependencies": {
-    "@types/node": "^17.0.5",
-    "@uwu-codes/eslint-config": "^1.0.31",
-    "@uwu-codes/tsconfig": "^1.0.1",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
+    "@types/node": "^18.11.9",
+    "@uwu-codes/eslint-config": "^1.1.5",
+    "@uwu-codes/tsconfig": "^1.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
   }
 }
