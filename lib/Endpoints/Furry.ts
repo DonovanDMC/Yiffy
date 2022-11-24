@@ -26,7 +26,7 @@ export default class Furry {
             host:      d.host || API_HOST
         };
     }
-    private async sendRequest(cat: FurryEndpoints, method?: "image" | "json", amount: 1 | 2 | 3 | 4 | 5 | undefined = method === "json" ? 1 : undefined, maxImageSize?: string): Promise<Array<JSONResponse> | JSONResponse | ImageResponse> {
+    private async sendRequest(cat: FurryEndpoints, method?: "image" | "json", amount?: 1 | 2 | 3 | 4 | 5, maxImageSize?: string): Promise<Array<JSONResponse> | JSONResponse | ImageResponse> {
         if (!cat) {
             throw new TypeError("missing category");
         }
@@ -34,6 +34,9 @@ export default class Furry {
             method = "json";
         }
         method = method.toLowerCase() as typeof method;
+        if (method === "json" && amount === undefined) {
+            amount = 1;
+        }
         if (["image"].includes(method) && amount && amount > 1) {
             throw new TypeError("Ammount cannot be greater than one when requesting an image.");
         }
