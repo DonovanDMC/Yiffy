@@ -1,6 +1,6 @@
 {
   "name": "yiffy",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "API Wrapper for https://yiff.rest.",
   "main": "dist/lib/index.js",
   "module": "esm.mjs",
@@ -14,7 +14,7 @@
   "scripts": {
     "add-re-export": "echo \"export * from \\\"./util/types\\\";\" >> dist/lib/index.d.ts",
     "build": "rm -rf dist && tsc && cp lib/util/types.d.ts dist/lib/util/ && npm run add-re-export && echo Build Finished",
-    "prePublishOnly": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
