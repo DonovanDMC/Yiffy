@@ -1,10 +1,3 @@
-export type YiffEndpoints = "andromorph" | "gynomorph" | "gay" | "lesbian" | "straight";
-export type FurryEndpoints = "boop" | "cuddle" | "flop" | "fursuit" | "hold" | "howl" | "hug" | "kiss" | "lick" | "propose" | "butts" | "bulge";
-export type AnimalEndpoints = "birb" | "blep" | "cheeta" | "dikdik" | "fox" | "lynx" | "wolf";
-
-export function f(method: "image"): Promise<ImageResponse>;
-export function f(method: "json", amount: 2 | 3 | 4 | 5, maxImageSize?: string): Promise<Array<JSONResponse>>;
-export function f(method?: "json", amount?: 1, maxImageSize?: string): Promise<JSONResponse>;
 
 export type DebugFunction = (url: string, time: {
     end: number;
@@ -16,6 +9,8 @@ export interface Options {
     baseURL: string;
     debug: DebugFunction;
     host: string;
+    shortenerBaseURL: string;
+    thumbsBaseURL: string;
     userAgent: string;
 }
 
@@ -33,7 +28,78 @@ export interface JSONResponse {
     width: number;
 }
 
-export interface ImageResponse {
-    data: JSONResponse;
-    image: Buffer;
+
+export interface APIFunction {
+    (amount?: 1, sizeLimit?: string | number): Promise<JSONResponse>;
+    (amount: 2 | 3 | 4 | 5, sizeLimit?: string | number): Promise<Array<JSONResponse>>;
+}
+
+export interface Methods {
+    animals: {
+        birb: APIFunction;
+        blep: APIFunction;
+        dikdik: APIFunction;
+    };
+    furry: {
+        boop: APIFunction;
+        bulge: APIFunction;
+        cuddle: APIFunction;
+        flop: APIFunction;
+        fursuit: APIFunction;
+        hold: APIFunction;
+        howl: APIFunction;
+        hug: APIFunction;
+        kiss: APIFunction;
+        lick: APIFunction;
+        propose: APIFunction;
+        yiff: {
+            andromorph: APIFunction;
+            gay: APIFunction;
+            gynomorph: APIFunction;
+            lesbian: APIFunction;
+            straight: APIFunction;
+        };
+    };
+}
+
+export interface BasicImageCategory {
+    _comment?: string;
+    db: string;
+    name: string;
+}
+
+export interface ImageCategory {
+    _comment?: string;
+    db: string;
+    dir: string;
+    disabled: boolean;
+    files: {
+        exists: boolean;
+        list: {
+            average: number;
+            averageM: number;
+            total: number;
+            totalM: number;
+        };
+        types: {
+            "image/gif"?: number;
+            "image/jpeg"?: number;
+            "image/png"?: number;
+        };
+    };
+    name: string;
+}
+
+export interface ShortURL {
+    code: string;
+    createdAt: string;
+    credit: number;
+    fullURL: string;
+    modifiedAt: string;
+    pos: number;
+    url: string;
+}
+
+export interface CreatedShortURL extends ShortURL {
+    managementCode: string | null;
 }

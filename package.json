@@ -1,6 +1,6 @@
 {
   "name": "yiffy",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "API Wrapper for https://yiff.rest.",
   "main": "dist/lib/index.js",
   "module": "esm.mjs",
@@ -38,10 +38,15 @@
   },
   "homepage": "https://yiff.rest",
   "devDependencies": {
-    "@types/node": "^18.11.9",
-    "@uwu-codes/eslint-config": "^1.1.5",
+    "@swc/core": "^1.3.21",
+    "@swc/helpers": "^0.4.14",
+    "@types/node": "^18.11.10",
+    "@uwu-codes/eslint-config": "^1.1.6",
     "@uwu-codes/tsconfig": "^1.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "undici": "^5.13.0"
   }
 }
