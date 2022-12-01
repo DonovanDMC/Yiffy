@@ -43,6 +43,7 @@ export interface Methods {
     furry: {
         boop: APIFunction;
         bulge: APIFunction;
+        butts: APIFunction;
         cuddle: APIFunction;
         flop: APIFunction;
         fursuit: APIFunction;
