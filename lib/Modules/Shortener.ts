@@ -14,12 +14,13 @@ export default class Shortener {
      * @param url The URL to shorten
      * @param code The code to use for the short URL, random if not provided
      * @param credit The credit to use for the short URL, `Unknown` if not provided
+     * @param editable If the short URL should be editable
      */
-    async create(url: string, code?: string, credit?: string) {
+    async create(url: string, code?: string, credit?: string, editable?: boolean) {
         if (!this.options.apiKey) {
             throw new Error("An API Key is required for Shortener#create");
         }
-        const res = await fetch(`${this.options.shortenerBaseURL}/create`, {
+        const res = await fetch(`${this.options.shortenerBaseURL}/create${typeof editable === "boolean" ? `?editable=${String(editable)}` : ""}`, {
             method:  "POST",
             headers: {
                 "User-Agent":    this.options.userAgent,
