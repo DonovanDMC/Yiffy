@@ -10,7 +10,7 @@ export default class Thumbs {
     }
 
     private async _checkUntilDone(url: string, time: number) {
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
             setTimeout(async() => {
                 const check = await this.check(url);
                 if (check === null) {
@@ -88,10 +88,9 @@ export default class Thumbs {
             const body = await res.json() as { checkAt: string; checkURL: string; startedAt: number; status: "processing"; success: true; time: number;  };
             return this._checkUntilDone(body.checkURL, body.time);
         }
-        const body = await res.json() as { code: YiffyErrorCodes; error: string; success: false; } | { success: true; } & Record<string, unknown>;
-        if (!body.success) {
-            throw new APIError(res.status, res.statusText, "POST", "thumbs", "/create", body.code, body.error);
-        }
+        const body = await res.json() as { code: YiffyErrorCodes; error: string; success: false; };
+
+        throw new APIError(res.status, res.statusText, "POST", "thumbs", "/create", body.code, body.error);
     }
 
     /**
