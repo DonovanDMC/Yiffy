@@ -52,3 +52,6 @@ export default class Yiffy {
         return this._thumbs || (this._thumbs = new Thumbs(this.options));
     }
 }
+
+export { default as APIError } from "./util/APIError";
+export * from "./util/Constants";
