@@ -1,6 +1,7 @@
 import APIError from "../util/APIError";
 import type { CreatedShortURL, Options, ShortURL } from "../util/types";
 import { YiffyErrorCodes } from "../util/Constants";
+import { Debug } from "../util/Debug";
 import { fetch } from "undici";
 
 export default class Shortener {
@@ -20,12 +21,15 @@ export default class Shortener {
         if (!this.options.apiKey) {
             throw new Error("An API Key is required for Shortener#create");
         }
+
+        const start = process.hrtime.bigint();
         const res = await fetch(`${this.options.shortenerBaseURL}/create${typeof editable === "boolean" ? `?editable=${String(editable)}` : ""}`, {
             method:  "POST",
             headers: {
                 "User-Agent":    this.options.userAgent,
                 "Content-Type":  "application/json",
-                "Authorization": this.options.apiKey
+                "Authorization": this.options.apiKey,
+                "Host":          this.options.shortenerHost
             },
             body: JSON.stringify({
                 url,
@@ -33,6 +37,8 @@ export default class Shortener {
                 credit
             })
         });
+        const end = process.hrtime.bigint();
+        Debug("request:images", `POST /create${typeof editable === "boolean" ? `?editable=${String(editable)}` : ""} - ${res.status} ${res.statusText} ${Math.trunc(Number(end - start) / 1000000)}ms`);
         const body = await res.json() as { code: YiffyErrorCodes; error: string; success: false; } | { data: CreatedShortURL; success: true; };
         if (!body.success) {
             throw new APIError(res.status, res.statusText, "POST", "shortener", "/create", body.code, body.error);
@@ -49,18 +55,24 @@ export default class Shortener {
         if (!this.options.apiKey) {
             throw new Error("An API Key is required for Shortener#delete");
         }
+
+        const start = process.hrtime.bigint();
         const res = await fetch(`${this.options.shortenerBaseURL}/delete`, {
             method:  "POST",
             headers: {
                 "User-Agent":    this.options.userAgent,
                 "Content-Type":  "application/json",
-                "Authorization": this.options.apiKey
+                "Authorization": this.options.apiKey,
+                "Host":          this.options.shortenerHost
             },
             body: JSON.stringify({
                 code,
                 managementCode
             })
         });
+        const end = process.hrtime.bigint();
+        Debug("request:images", `POST /delete - ${res.status} ${res.statusText} ${Math.trunc(Number(end - start) / 1000000)}ms`);
+
         if (res.status !== 204) {
             const body = await res.json() as { code: YiffyErrorCodes; error: string; success: false; };
             throw new APIError(res.status, res.statusText, "POST", "shortener", "/delete", body.code, body.error);
@@ -83,7 +95,8 @@ export default class Shortener {
             headers: {
                 "User-Agent":    this.options.userAgent,
                 "Content-Type":  "application/json",
-                "Authorization": this.options.apiKey
+                "Authorization": this.options.apiKey,
+                "Host":          this.options.shortenerHost
             },
             body: JSON.stringify({
                 managementCode,
@@ -106,13 +119,18 @@ export default class Shortener {
         if (!this.options.apiKey) {
             throw new Error("An API Key is required for Shortener#get");
         }
+
+        const start = process.hrtime.bigint();
         const res = await fetch(`${this.options.shortenerBaseURL}/${code}.json`, {
             method:  "GET",
             headers: {
                 "User-Agent":    this.options.userAgent,
-                "Authorization": this.options.apiKey
+                "Authorization": this.options.apiKey,
+                "Host":          this.options.shortenerHost
             }
         });
+        const end = process.hrtime.bigint();
+        Debug("request:images", `GET /${code}.json - ${res.status} ${res.statusText} ${Math.trunc(Number(end - start) / 1000000)}ms`);
         const body = await res.json() as { code: YiffyErrorCodes; error: string; success: false; } | { data: ShortURL; success: true; };
         if (!body.success) {
             if (body.code === YiffyErrorCodes.SHORTENER_NOT_FOUND) {

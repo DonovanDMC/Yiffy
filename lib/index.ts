@@ -1,7 +1,9 @@
 import {
     API_HOST,
     API_URL,
+    SHORTENER_HOST,
     SHORTENER_URL,
+    THUMBS_HOST,
     THUMBS_URL,
     USER_AGENT
 } from "./util/Constants";
@@ -22,11 +24,12 @@ export default class Yiffy {
         this.options = {
             userAgent:        d.userAgent || USER_AGENT,
             apiKey:           d.apiKey || "",
-            debug:            d.debug || (() => null),
             baseURL:          d.baseURL || API_URL,
             host:             d.host || API_HOST,
             shortenerBaseURL: d.shortenerBaseURL || SHORTENER_URL,
-            thumbsBaseURL:    d.thumbsBaseURL || THUMBS_URL
+            shortenerHost:    d.shortenerHost || SHORTENER_HOST,
+            thumbsBaseURL:    d.thumbsBaseURL || THUMBS_URL,
+            thumbsHost:       d.thumbsHost || THUMBS_HOST
         };
     }
 

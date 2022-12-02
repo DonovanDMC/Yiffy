@@ -7,10 +7,11 @@ export type DebugFunction = (url: string, time: {
 export interface Options {
     apiKey: string;
     baseURL: string;
-    debug: DebugFunction;
     host: string;
     shortenerBaseURL: string;
+    shortenerHost: string;
     thumbsBaseURL: string;
+    thumbsHost: string;
     userAgent: string;
 }
 

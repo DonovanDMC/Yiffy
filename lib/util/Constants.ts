@@ -4,7 +4,9 @@ export const API_VERSION = "V2";
 export const API_URL = `https://${API_VERSION.toLowerCase()}.yiff.rest`;
 export const API_HOST = `${API_VERSION.toLowerCase()}.yiff.rest`;
 export const THUMBS_URL = "https://thumbs.yiff.rest";
+export const THUMBS_HOST = "thumbs.yiff.rest";
 export const SHORTENER_URL = "https://yiff.rocks";
+export const SHORTENER_HOST = "yiff.rocks";
 export const API_HEADERS = {
     artists:   "X-Yiffy-Artist",
     source:    "X-Yiffy-Source",
