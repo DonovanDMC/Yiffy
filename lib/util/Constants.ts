@@ -1,3 +1,4 @@
+import type { APIFunction } from "./types";
 import pkg from "../../package.json";
 
 export const API_VERSION = "V2";
@@ -67,3 +68,33 @@ export enum YiffyErrorCodes {
     SHORTENER_URL_IN_USE               = 1079,
     SHORTENER_NO_CHANGES               = 1080,
 }
+
+const ImageMethod = null as unknown as APIFunction;
+export const ImagesStructure = {
+    animals: {
+        birb:   ImageMethod,
+        blep:   ImageMethod,
+        dikdik: ImageMethod
+    },
+    furry: {
+        boop:    ImageMethod,
+        bulge:   ImageMethod,
+        butts:   ImageMethod,
+        cuddle:  ImageMethod,
+        flop:    ImageMethod,
+        fursuit: ImageMethod,
+        hold:    ImageMethod,
+        howl:    ImageMethod,
+        hug:     ImageMethod,
+        kiss:    ImageMethod,
+        lick:    ImageMethod,
+        propose: ImageMethod,
+        yiff:    {
+            andromorph: ImageMethod,
+            gay:        ImageMethod,
+            gynomorph:  ImageMethod,
+            lesbian:    ImageMethod,
+            straight:   ImageMethod
+        }
+    }
+};

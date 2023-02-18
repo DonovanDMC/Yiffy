@@ -1,33 +1,31 @@
-import type {
-    BasicImageCategory,
-    ImageCategory,
-    JSONResponse,
-    Methods,
-    Options
-} from "../util/types";
-import { YiffyErrorCodes } from "../util/Constants";
+import type { BasicImageCategory, ImageCategory, JSONResponse, Options } from "../util/types";
+import { ImagesStructure, YiffyErrorCodes } from "../util/Constants";
 import APIError from "../util/APIError";
 import { Debug } from "../util/Debug";
 import { fetch } from "undici";
+import dot from "dot-object";
 
-function CreateImagesWrapper(doRequest: (path: string, amount?: number, sizeLimit?: string | number) => unknown, props: Array<string> = []): Methods {
+function CreateImagesWrapper(doRequest: (path: string, amount?: number, sizeLimit?: string | number) => unknown, props: Array<string> = []): typeof ImagesStructure {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     return new Proxy(function() {}, {
         get(target, key) {
             if (typeof key !== "string") {
                 throw new TypeError(`Expected key to be a string, got ${typeof key}`);
             }
-            return CreateImagesWrapper(doRequest, [...props, key]);
-        },
-        apply(target, thisArg, args: [number?, (string | number)?]) {
-            return doRequest.call(thisArg, `/${props.join("/")}`, args[0]);
+            const o = dot.pick([...props, key].join("."), ImagesStructure) as undefined | object | null;
+            if (o === null) {
+                return (...args: [number?, (string | number)?]) => doRequest(`/${[...props, key].join("/")}`, args[0]);
+            }
+            if (typeof o === "object") {
+                return CreateImagesWrapper(doRequest, [...props, key]);
+            }
         }
-    }) as unknown as Methods;
+    }) as unknown as typeof ImagesStructure;
 }
 
 export default class Images {
     private options: Options;
-    private wrapper: Methods;
+    private wrapper: typeof ImagesStructure;
     constructor(options: Options) {
         this.options = options;
         this.wrapper = CreateImagesWrapper(this.requestImages.bind(this));

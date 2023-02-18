@@ -31,37 +31,8 @@ export interface JSONResponse {
 
 
 export interface APIFunction {
-    (amount?: 1, sizeLimit?: string | number): Promise<JSONResponse>;
-    (amount: 2 | 3 | 4 | 5, sizeLimit?: string | number): Promise<Array<JSONResponse>>;
-}
-
-export interface Methods {
-    animals: {
-        birb: APIFunction;
-        blep: APIFunction;
-        dikdik: APIFunction;
-    };
-    furry: {
-        boop: APIFunction;
-        bulge: APIFunction;
-        butts: APIFunction;
-        cuddle: APIFunction;
-        flop: APIFunction;
-        fursuit: APIFunction;
-        hold: APIFunction;
-        howl: APIFunction;
-        hug: APIFunction;
-        kiss: APIFunction;
-        lick: APIFunction;
-        propose: APIFunction;
-        yiff: {
-            andromorph: APIFunction;
-            gay: APIFunction;
-            gynomorph: APIFunction;
-            lesbian: APIFunction;
-            straight: APIFunction;
-        };
-    };
+    (this: void, amount?: 1, sizeLimit?: string | number): Promise<JSONResponse>;
+    (this: void, amount: 2 | 3 | 4 | 5, sizeLimit?: string | number): Promise<Array<JSONResponse>>;
 }
 
 export interface BasicImageCategory {

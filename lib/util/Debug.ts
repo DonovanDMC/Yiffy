@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 let debug: typeof import("debug") | undefined;
 try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires, unicorn/prefer-module
