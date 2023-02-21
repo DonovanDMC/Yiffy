@@ -37,7 +37,7 @@ export default class Thumbs {
             throw new Error("An API Key is required for Thumbs#check");
         }
         const start = process.hrtime.bigint();
-        const url = !type ? md5OrURL : `${this.options.thumbsBaseURL}/check/${type}/${md5OrURL}`;
+        const url = type ? `${this.options.thumbsBaseURL}/check/${type}/${md5OrURL}` : md5OrURL;
         const res = await fetch(url, {
             method:  "GET",
             headers: {

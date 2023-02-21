@@ -1,6 +1,6 @@
 {
   "name": "yiffy",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "API Wrapper for https://yiff.rest.",
   "main": "dist/lib/index.js",
   "module": "esm.mjs",
@@ -50,7 +50,6 @@
     "typescript": "^4.9.5"
   },
   "dependencies": {
-    "dot-object": "^2.1.4",
     "undici": "^5.20.0"
   }
 }

@@ -10,7 +10,7 @@ export default class APIError extends Error {
     statusCode: number;
     statusText: string;
     constructor(statusCode: number, statusText: string, method: string, service: APIError["service"], path: string, code?: YiffyErrorCodes, message?: string) {
-        super(`Unexpected ${statusCode} ${statusText} on ${method} ${path}${code || message ? ": " : ""}${message && `${message} ` || ""}${code ? `${!message ? `${YiffyErrorCodes[code]} ` : ""}(${code})` : ""}`);
+        super(`Unexpected ${statusCode} ${statusText} on ${method} ${path}${code || message ? ": " : ""}${message && `${message} ` || ""}${code ? `${message ? "" : `${YiffyErrorCodes[code]} `}(${code})` : ""}`);
         this.code = code;
         this.method = method;
         this.service = service;
