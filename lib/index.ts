@@ -11,6 +11,7 @@ import type { Options } from "./util/types";
 import Images from "./Modules/Images";
 import Thumbs from "./Modules/Thumbs";
 import Shortener from "./Modules/Shortener";
+export { ThumbCanceledError } from "./Modules/Thumbs";
 
 export default class Yiffy {
     private _images: Images;

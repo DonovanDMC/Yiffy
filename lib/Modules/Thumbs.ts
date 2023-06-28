@@ -4,27 +4,48 @@ import type { Options } from "../util/types";
 import { Debug } from "../util/Debug";
 import { fetch } from "undici";
 
+
+export class ThumbCanceledError extends Error {
+    override message = "cancel() was called during thumbnail generation";
+    override name = "ThumbCanceledError";
+}
+
 export default class Thumbs {
+    private _cancelable: Record<string, (error: boolean) => void> = {};
     private options: Options;
     constructor(options: Options) {
         this.options = options;
     }
 
-    private async _checkUntilDone(url: string, time: number) {
-        return new Promise<string>((resolve, reject) => {
-            setTimeout(async() => {
-                const check = await this.check(url);
-                if (check === null) {
-                    return reject(new Error("Generation Timed Out"));
+    private async _checkUntilDone(url: string, time: number): Promise<string> {
+        let canceled = false;
+        await new Promise((resolve, reject) => {
+            const timeout = setTimeout(resolve, time);
+            this._cancelable[url] = (error: boolean) => {
+                clearTimeout(timeout);
+                delete this._cancelable[url];
+                if (error) {
+                    reject(new ThumbCanceledError());
+                } else {
+                    canceled = true;
                 }
-
-                if (check.done) {
-                    return resolve(check.url);
-                }
-
-                return resolve(this._checkUntilDone(check.checkURL, check.time));
-            }, time);
+            };
+        }).then(() => {
+            delete this._cancelable[url];
         });
+        if (canceled) {
+            return null as never;
+        }
+        const check = await this.check(url);
+        if (check === null) {
+            throw new Error("Generation Timed Out");
+        }
+
+        if (check.done) {
+            return check.url;
+        }
+
+        return this._checkUntilDone(check.checkURL, check.time);
     }
 
     /**
@@ -74,6 +95,7 @@ export default class Thumbs {
      * @param type The type of thumb to generate
      */
     async create(md5OrID: string | number, type: "gif" | "png") {
+        let url: string | undefined;
         if (!this.options.apiKey) {
             throw new Error("An API Key is required for Thumbs#create");
         }
@@ -95,8 +117,20 @@ export default class Thumbs {
             return body.url;
         }
         if (res.status === 202) {
-            const body = await res.json() as { checkAt: string; checkURL: string; startedAt: number; status: "processing"; success: true; time: number;  };
-            return this._checkUntilDone(body.checkURL, body.time);
+            const body = await res.json() as { checkAt: string; checkURL: string; startedAt: number; status: "processing"; success: true; time: number; };
+            const promise = this._checkUntilDone(url = body.checkURL, body.time) as Promise<string> & { cancel(error?: boolean): void; };
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            Object.defineProperty(promise, "cancel", {
+                configurable: false,
+                enumerable:   false,
+                writable:     false,
+                value:        (error = true) => {
+                    if (url && this._cancelable[url]) {
+                        this._cancelable[url](error);
+                    }
+                }
+            });
+            return promise;
         }
         const body = await res.json() as { code: YiffyErrorCodes; error: string; success: false; };
 
@@ -104,7 +138,7 @@ export default class Thumbs {
     }
 
     /**
-     * Delete a thumb.
+     * Get a thumb.
      * @param md5OrID The MD5 or the ID of the image to delete the thumb for
      */
     async get(md5OrID: string | number) {
